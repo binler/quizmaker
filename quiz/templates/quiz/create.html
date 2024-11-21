@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Create{% endblock %}
+
+{% block content %}
+    <form hx-post="/quiz/create/"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-target="#result">
+        <input type="text" name="question_text" id="">
+        <button type="submit">Tạo</button>
+    </form>
+    <section>
+        <p id="result">
+            <em>Awaiting interaction...</em>
+        </p>
+    </section>
+{% endblock %}
