@@ -1,3 +1,11 @@
+## Features
+
+- Tailwind
+- Django
+- HTMX
+- Authentication
+- [Admin One](https://github.com/justboil/admin-one-tailwind)
+
 ## Guide
 
 ```bash
