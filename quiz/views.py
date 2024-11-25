@@ -1,21 +1,39 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 
-from framework.views import BaseCreateView, BaseDetailView, BaseListView
+from framework.views import (BaseCreateView, BaseDeleteView, BaseDetailView,
+                             BaseListView)
 
 from .models import Question
 
 
 class IndexView(LoginRequiredMixin, BaseListView):
-    template_name = "quiz/index.html"
-    context_object_name = "latest_question_list"
+    template_name = "quiz/list.html"
+    context_object_name = "questions"
     title_bar = "Danh sách quiz"
+    paginate_by = 10
 
     def get_queryset(self):
-        """Return the last five published questions."""
+        """Return questions ordered by id."""
         return Question.objects.order_by("-id")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if context["is_paginated"]:
+            # Get the page number from the query parameters, default to 1
+            page = self.request.GET.get("page", 1)
+            paginator = context["paginator"]
+            try:
+                questions = paginator.page(page)
+            except PageNotAnInteger:
+                questions = paginator.page(1)
+            except EmptyPage:
+                questions = paginator.page(paginator.num_pages)
+            context["questions"] = questions
+        return context
 
 
 class DetailView(LoginRequiredMixin, BaseDetailView):
@@ -60,3 +78,17 @@ class CreateView(LoginRequiredMixin, BaseCreateView):
         # Here, we would record the user's interest using the message
         # passed in form.cleaned_data['message']
         return super().form_valid(form)
+
+
+class DeleteView(LoginRequiredMixin, BaseDeleteView):
+    # TODO: view confirm modal
+    model = Question
+    success_url = reverse_lazy("quiz:list")
+    template_name = "quiz/confirm_delete.html"
+    title_bar = "Xóa quiz"
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponse(status=200, headers={"HX-Redirect": success_url})

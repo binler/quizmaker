@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Quiz
+{% endblock title %}
+
+{% block content %}
+    <section class="section main-section">
+        <div class="notification blue">
+            <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
+                <div>
+                    <span class="icon"><i class="mdi mdi-buffer"></i></span>
+                    <b>Tạo mới thành công</b>
+                </div>
+                <button type="button" class="button small textual --jb-notification-dismiss">Đóng</button>
+            </div>
+        </div>
+
+        <div class="card {% if questions %}has-table{% else %}empty{% endif %}">
+            <header class="card-header">
+                <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+                    Danh sách bài quiz
+                </p>
+                <a href="{% url 'quiz:create' %}" class="card-header-icon button blue">
+                    <span class="icon"><i class="mdi mdi-plus"></i></span>Tạo
+                </a>
+            </header>
+            {% if questions %}
+                <div class="card-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="checkbox-cell">
+                                    <label class="checkbox">
+                                        <input type="checkbox">
+                                        <span class="check"></span>
+                                    </label>
+                                </th>
+                                <th>Câu hỏi</th>
+                                <th>Ngày tạo</th>
+                                <th>Cập nhật lần cuối</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody hx-confirm="Are you sure?"
+                               hx-target="closest tr"
+                               hx-swap="outerHTML swap:1s">
+                            {% for question in questions %}
+                                <tr>
+                                    <td class="checkbox-cell">
+                                        <label class="checkbox">
+                                            <input type="checkbox">
+                                            <span class="check"></span>
+                                        </label>
+                                    </td>
+                                    <td data-label="Câu hỏi">{{ question.question_text }}</td>
+                                    <td data-label="Ngày tạo">
+                                        <small class="text-gray-500" title="Oct 25, 2021">{{ question.get_created_at_vn }}</small>
+                                    </td>
+                                    <td data-label="Cập nhật lần cuối">
+                                        <small class="text-gray-500" title="Oct 25, 2021">{{ question.get_updated_at_vn }}</small>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="buttons right nowrap">
+                                            <a class="button small blue --jb-modal"
+                                               type="button"
+                                               href="{% url 'quiz:detail' question.id %}">
+                                                <span class="icon"><i class="mdi mdi-eye"></i></span>
+                                            </a>
+                                            <button class="button small red --jb-modal"
+                                                    hx-delete="/quiz/{{ question.id }}/delete/"
+                                                    data-target="sample-modal"
+                                                    type="button">
+                                                <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if is_paginated %}
+                        <div class="table-pagination">
+                            <div class="flex items-center justify-between">
+                                <div class="buttons">
+                                    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="button">Trước</a>{% endif %}
+                                    {% for num in paginator.page_range %}
+                                        {% if page_obj.number == num %}
+                                            <a class="button active">{{ num }}</a>
+                                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                            <a href="?page={{ num }}" class="button">{{ num }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="button">Tiếp</a>{% endif %}
+                                </div>
+                                <small>Hiển thị {{ page_obj.start_index }} đến {{ page_obj.end_index }} trong tổng số {{ paginator.count }} câu hỏi</small>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="card-content">
+                    <div>
+                        <span class="icon large"><i class="mdi mdi-emoticon-sad mdi-48px"></i></span>
+                    </div>
+                    <p>Không có gì hết...</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock content %}
