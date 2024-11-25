@@ -1,4 +1,5 @@
-from django.views.generic import CreateView, DetailView, ListView, TemplateView
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  TemplateView)
 
 
 class BaseTitleMixin:
@@ -26,4 +27,8 @@ class BaseDetailView(BaseTitleMixin, DetailView):
 
 
 class BaseCreateView(BaseTitleMixin, CreateView):
+    pass
+
+
+class BaseDeleteView(BaseTitleMixin, DeleteView):
     pass
