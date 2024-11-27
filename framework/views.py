@@ -1,5 +1,12 @@
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  TemplateView)
+from django.http import HttpRequest
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+)
+from django_htmx.middleware import HtmxDetails
 
 
 class BaseTitleMixin:
@@ -32,3 +39,9 @@ class BaseCreateView(BaseTitleMixin, CreateView):
 
 class BaseDeleteView(BaseTitleMixin, DeleteView):
     pass
+
+
+# Typing pattern recommended by django-stubs:
+# https://github.com/typeddjango/django-stubs#how-can-i-create-a-httprequest-thats-guaranteed-to-have-an-authenticated-user
+class HtmxHttpRequest(HttpRequest):
+    htmx: HtmxDetails
