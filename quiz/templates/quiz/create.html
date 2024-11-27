@@ -13,7 +13,7 @@
                     Tạo câu hỏi trắc nghiệm
                 </p>
             </header>
-            <div class="card-content">
+            <div class="card-content" id="quiz-create">
                 <form hx-post="{% url 'quiz:create' %}"
                       hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
                     <div class="field">
@@ -87,7 +87,10 @@
                             <button type="submit" class="button green">Tạo</button>
                         </div>
                         <div class="control">
-                            <a href="{% url 'quiz:list' %}" class="button red">Trở lại</a>
+                            <button class="button red"
+                                    hx-get="{% url 'quiz:list' %}"
+                                    hx-push-url="/quiz"
+                                    hx-target="#quiz-create">Trở lại</button>
                         </div>
                     </div>
                 </form>
