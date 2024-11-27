@@ -14,7 +14,7 @@
                 </p>
             </header>
             <div class="card-content">
-                <form method="post">
+                <form method="post" id="login-form">
                     {% csrf_token %}
                     <div class="field spaced">
                         <label class="label">Tên đăng nhập</label>
@@ -39,8 +39,15 @@
                                    autocomplete="current-password">
                             <span class="icon is-small left"><i class="mdi mdi-asterisk"></i></span>
                         </p>
-                        <p class="help">Please enter your password</p>
                     </div>
+                    {% if form.errors %}
+                        <div style="color: red;">
+                            {% for field in form %}
+                                {% for error in field.errors %}<p>{{ error }}</p>{% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                        </div>
+                    {% endif %}
 
                     <div class="field spaced">
                         <div class="control">
@@ -51,7 +58,6 @@
                             </label>
                         </div>
                     </div>
-                    {{ message }}
                     <hr>
 
                     <div class="field grouped">

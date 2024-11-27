@@ -1,11 +1,13 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
-from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView
+from django_htmx.http import retarget
+
+from framework.views import HtmxHttpRequest
 
 
 class SignUpView(CreateView):
@@ -14,30 +16,28 @@ class SignUpView(CreateView):
     template_name = "signup.html"
 
 
-def login_user(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        try:
-            # user_details = User.objects.get(username=username)
-            user = authenticate(
-                request, username=username, password=password
-            )  # Check the username and password
-            if user is not None:
-                login(request, user)  # Login the user and return Http response.
-                return HttpResponse("Login Success")
-            else:
-                return render(request, "login.html", {"message": "Invalid Credentials"})
-        except ObjectDoesNotExist:
-            return render(request, "login.html", {"message": "User does not exist"})
+class CustomLoginView(LoginView):
+    template_name = "registration/login.html"  # Đường dẫn tới template của bạn
 
-    context = {}
-    return render(request, "login.html", context=context)
+    def form_valid(self, form):
+        # Thực hiện các thao tác tùy chỉnh ở đây, ví dụ:
+        # Ghi log, thay đổi redirect URL, v.v.
+        response = super().form_valid(form)
+        # Thực hiện các thao tác khác nếu cần
+        return response
+
+    def form_invalid(self, form):
+        # Here, we would record the user's interest using the message
+        # passed in form.cleaned_data['message']
+        response = super().form_invalid(form)
+        return retarget(response, "#login-form")
+
+    def get_success_url(self):
+        # Đường dẫn để chuyển hướng sau khi đăng nhập thành công
+        return reverse_lazy("quiz:list")
 
 
 @require_POST
-def logout_view(request):
+def logout_view(request: HtmxHttpRequest):
     logout(request)
-    if request.headers.get("HX-Request"):
-        return HttpResponse(status=200, headers={"HX-Redirect": reverse("login")})
-    return redirect("login")
+    return HttpResponse(status=200, headers={"HX-Redirect": reverse("login")})
