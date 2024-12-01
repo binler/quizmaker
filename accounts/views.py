@@ -17,24 +17,14 @@ class SignUpView(CreateView):
 
 
 class CustomLoginView(LoginView):
-    template_name = "registration/login.html"  # Đường dẫn tới template của bạn
-
-    def form_valid(self, form):
-        # Thực hiện các thao tác tùy chỉnh ở đây, ví dụ:
-        # Ghi log, thay đổi redirect URL, v.v.
-        response = super().form_valid(form)
-        # Thực hiện các thao tác khác nếu cần
-        return response
+    template_name = "registration/login.html"
+    success_url = reverse_lazy("quiz:list")
 
     def form_invalid(self, form):
         # Here, we would record the user's interest using the message
         # passed in form.cleaned_data['message']
         response = super().form_invalid(form)
         return retarget(response, "#login-form")
-
-    def get_success_url(self):
-        # Đường dẫn để chuyển hướng sau khi đăng nhập thành công
-        return reverse_lazy("quiz:list")
 
 
 @require_POST
