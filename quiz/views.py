@@ -4,8 +4,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 
-from framework.views import (BaseCreateView, BaseDeleteView, BaseDetailView,
-                             BaseListView)
+from framework.views import BaseCreateView, BaseDeleteView, BaseDetailView, BaseListView
 
 from .models import Question
 
@@ -14,7 +13,7 @@ class IndexView(LoginRequiredMixin, BaseListView):
     template_name = "quiz/list.html"
     context_object_name = "questions"
     title_bar = "Danh sách quiz"
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
         """Return questions ordered by id."""
@@ -81,7 +80,6 @@ class CreateView(LoginRequiredMixin, BaseCreateView):
 
 
 class DeleteView(LoginRequiredMixin, BaseDeleteView):
-    # TODO: view confirm modal
     model = Question
     success_url = reverse_lazy("quiz:list")
     template_name = "quiz/confirm_delete.html"
@@ -89,6 +87,5 @@ class DeleteView(LoginRequiredMixin, BaseDeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        success_url = self.get_success_url()
         self.object.delete()
-        return HttpResponse(status=200, headers={"HX-Redirect": success_url})
+        return HttpResponse(status=204, headers={"HX-Trigger": "quiz-deleted"})

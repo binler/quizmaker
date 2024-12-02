@@ -56,22 +56,20 @@
                                     </td>
                                     <td data-label="Câu hỏi">{{ question.question_text }}</td>
                                     <td data-label="Ngày tạo">
-                                        <small class="text-gray-500" title="Oct 25, 2021">{{ question.get_created_at_vn }}</small>
+                                        <small class="text-gray-500">{{ question.get_created_at_vn }}</small>
                                     </td>
                                     <td data-label="Cập nhật lần cuối">
-                                        <small class="text-gray-500" title="Oct 25, 2021">{{ question.get_updated_at_vn }}</small>
+                                        <small class="text-gray-500">{{ question.get_updated_at_vn }}</small>
                                     </td>
                                     <td class="actions-cell">
                                         <div class="buttons right nowrap">
-                                            <a class="button small blue --jb-modal"
-                                               type="button"
-                                               href="{% url 'quiz:detail' question.id %}">
+                                            <a class="button small blue" href="{% url 'quiz:detail' question.id %}">
                                                 <span class="icon"><i class="mdi mdi-eye"></i></span>
                                             </a>
-                                            <button class="button small red --jb-modal"
-                                                    hx-delete="/quiz/{{ question.id }}/delete/"
-                                                    data-target="sample-modal"
-                                                    type="button">
+                                            <button class="button small red"
+                                                    hx-delete="{% url 'quiz:delete' question.id %}"
+                                                    hx-on:quiz-deleted="this.closest('tr').remove()"
+                                                    hx-swap="outerHTML swap:1s">
                                                 <span class="icon"><i class="mdi mdi-trash-can"></i></span>
                                             </button>
                                         </div>
