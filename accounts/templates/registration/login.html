@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Login
+    Đăng nhập
 {% endblock title %}
 
 {% block auth %}
@@ -10,11 +10,13 @@
             <header class="card-header">
                 <p class="card-header-title">
                     <span class="icon"><i class="mdi mdi-lock"></i></span>
-                    Login
+                    Đăng nhập
                 </p>
             </header>
             <div class="card-content">
-                <form method="post" id="login-form">
+                <form method="post"
+                      hx-target="this"
+                      hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
                     {% csrf_token %}
                     <div class="field spaced">
                         <label class="label">Tên đăng nhập</label>
@@ -27,7 +29,7 @@
                             <span class="icon is-small left"><i class="mdi mdi-account"></i></span>
                         </div>
                         {% if form.username.errors %}
-                            {% for error in form.username.errors %}<p class="help text-danger">{{ error }}</p>{% endfor %}
+                            {% for error in form.username.errors %}<p class="form-error">{{ error }}</p>{% endfor %}
                         {% endif %}
                     </div>
 
@@ -42,7 +44,7 @@
                             <span class="icon is-small left"><i class="mdi mdi-asterisk"></i></span>
                         </p>
                         {% if form.password.errors %}
-                            {% for error in form.password.errors %}<p class="help">{{ error }}</p>{% endfor %}
+                            {% for error in form.password.errors %}<p class="form-error">{{ error }}</p>{% endfor %}
                         {% endif %}
                     </div>
                     {% if form.errors %}

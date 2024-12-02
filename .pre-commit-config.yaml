@@ -36,3 +36,5 @@ repos:
             -
                 id: djhtml
                 entry: djhtml --tabwidth 4
+            -
+                id: djcss

@@ -33,7 +33,7 @@
     @apply flex justify-start;
   }
 
-  .field.grouped > .control:not(:last-child) {
+  .field.grouped>.control:not(:last-child) {
     @apply mr-3;
   }
 
@@ -49,19 +49,29 @@
     @apply relative;
   }
 
-  .control.icons-left, .control.icons-right {
+  .control.icons-left,
+  .control.icons-right {
     @apply relative;
   }
 
-  .input, .textarea, .select select, .file-cta, .file-name {
+  .input,
+  .textarea,
+  .select select,
+  .file-cta,
+  .file-name {
     @apply px-3 py-2 border border-gray-400 rounded;
   }
 
-  .input, .select select, .file-cta, .file-name {
+  .input,
+  .select select,
+  .file-cta,
+  .file-name {
     @apply h-10;
   }
 
-  .input, .textarea, .select select {
+  .input,
+  .textarea,
+  .select select {
     @apply w-full max-w-full focus:border-gray-100 focus:ring focus:outline-none bg-white;
   }
 
@@ -73,11 +83,13 @@
     @apply h-24;
   }
 
-  .control.icons-left .icon, .control.icons-right .icon {
+  .control.icons-left .icon,
+  .control.icons-right .icon {
     @apply absolute top-0 z-10 w-10 h-10;
   }
 
-  .control.icons-left .input, .control.icons-left .select select {
+  .control.icons-left .input,
+  .control.icons-left .select select {
     @apply pl-10;
   }
 
@@ -85,7 +97,8 @@
     @apply left-0;
   }
 
-  .control.icons-right .input, .control.icons-right .select select {
+  .control.icons-right .input,
+  .control.icons-right .select select {
     @apply pr-10;
   }
 
@@ -95,6 +108,10 @@
 
   .help {
     @apply block text-xs text-gray-500 mt-1;
+  }
+
+  .form-error {
+    @apply block text-xs text-red-600 mt-1;
   }
 
   .file {

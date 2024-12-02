@@ -21,5 +21,4 @@ from django.urls import include, path
 urlpatterns = [
     path("quiz/", include(("quiz.urls", "quiz"), namespace="quiz")),
     path("accounts/", include("accounts.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
 ] + debug_toolbar_urls()
