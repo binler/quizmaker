@@ -57,6 +57,14 @@ python manage.py runserver
 
 Truy cập ứng dụng tại `http://localhost:8000`
 
+4. rebuild assets:
+```bash
+npx tailwindcss -i ./framework/static/css/main.css -o ./framework/static/css/main.min.css
+
+# watch
+npx tailwindcss -i ./framework/static/css/main.css -o ./framework/static/css/main.min.css --watch
+```
+
 
 ## Đóng Góp
 

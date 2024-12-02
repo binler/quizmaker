@@ -30,10 +30,9 @@ repos:
             -
                 id: flake8
     -
-        repo: 'https://github.com/Riverside-Healthcare/djLint'
-        rev: v1.32.1
+        repo: 'https://github.com/rtts/djhtml'
+        rev: 'main'
         hooks:
             -
-                id: djlint-django
-                args:
-                    - '--reformat'
+                id: djhtml
+                entry: djhtml --tabwidth 4
